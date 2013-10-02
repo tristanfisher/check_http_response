@@ -19,6 +19,29 @@ A python module to check an HTTP response either via JSON or plaintext.  Useful 
 	  --json JSON JSON      compares against a JSON key/value pair from a URI
 	  --text TEXT           compares against a plain text response from a URI
 
+
+#####A word of caution with checking text: 
+
+If you plan on checking a text file, you likely want to write data to the file without a newline. 
+
+e.g. use the following: 
+
+`$ echo -n 'ok' > /var/www/testpage.html`
+
+Otherwise, you're actually putting in the contents `'ok\n'` and *may be surprised* by the check returning an error.  
+
+e.g. you may run into the following:
+
+`$ echo 'ok' > /var/www/testpage.html` *#echo adds a newline :(*
+
+`$ ./check_http_response.py --server 'http://example.org/testpage.html' --text 'ok'`
+
+`(2, "CRITICAL - Expected ok ; Received: ok\n]")`
+
+
+This is not a flaw in check_http_response or tools such as echo.  The latter tries to be helpful (most of the time, you want a newline) and the prior by design should be strict in its comparisons. 
+
+
 ###Requirements
 + [Python](http://www.python.org/)
 + The Python ['Requests' module](http://docs.python-requests.org/en/latest/user/install/#install)
