@@ -126,5 +126,5 @@ def test():
 
 if __name__ == "__main__":
   subprocess.call(["/usr/bin/env","python","check_http_response.py","-h"])
-  pass
+  sys.exit(1)
 
