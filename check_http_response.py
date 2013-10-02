@@ -5,7 +5,7 @@ import requests
 import sys
 import subprocess
 
-VERSION='0.01'
+VERSION='1.00'
 def show_version(): print(VERSION)
 
 class Nagios:
