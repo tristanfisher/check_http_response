@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-import json,requests,sys
+import json
+import requests
+import sys
+import subprocess
 
 VERSION='0.01'
 def show_version(): print(VERSION)
@@ -118,9 +121,10 @@ if args.json:
 if args.text:
     check_text_response(args.server, args.text)
 
-#def test():
-#    check_json_response('https://example.org/status', 'status', 'ok')
+def test():
+    check_json_response('https://example.org/status', 'status', 'ok')
 
-#if __name__ == "__main__":
-#    test()
+if __name__ == "__main__":
+  subprocess.call(["/usr/bin/env","python","check_http_response.py","-h"])
+  pass
 
