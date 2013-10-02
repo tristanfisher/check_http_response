@@ -4,6 +4,7 @@ import json
 import requests
 import sys
 import subprocess
+import argparse
 
 VERSION='1.01'
 def show_version(): print(VERSION)
@@ -66,7 +67,6 @@ def check_text_response(text_response,expected_response_text):
     else:
         nagiosExit(nagios.ok)
 
-import argparse
 parser = argparse.ArgumentParser(description=str("A Nagios-ready python script for comparing data retrieved from an HTTP source.\n ./check_http_response.py --host 'https://example.org/status' --json 'status' 'ok'"))
 parser.add_argument('-v', '--version', action="store_true", help='Show script version and exit')
 parser.add_argument('--server', '--host', help="specify a target host", type=str)
