@@ -6,7 +6,7 @@ import sys
 import subprocess
 import argparse
 
-VERSION='1.01'
+VERSION='1.02'
 def show_version(): print(VERSION)
 
 class Nagios:
@@ -32,12 +32,12 @@ def uri_request(uri, expected_response_format=None, arg0=None, arg1=None):
             nagiosExit(nagios.critical, str("Status code: {0} :: {1}".format(request.status_code, uri)))
 
         else:
-            if expected_response_format == 'JSON': 
+            if expected_response_format == 'JSON':
                 json_response = json.loads(request.text)
                 check_json_response(json_response, check_json_key=arg0, check_json_value=arg1)
-            else: 
+            else:
                 text_response = str(request.content) #be careful on strings that could look like other types
-                check_text_response(text_response, arg0) 
+                check_text_response(text_response, arg0)
 
     except requests.ConnectionError : nagiosExit(nagios.critical,str("Error loading :: {0}".format(uri)))
     except requests.Timeout : nagiosExit(nagios.critical,str("Timed out :: {0}".format(uri)))
