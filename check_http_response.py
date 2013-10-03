@@ -67,28 +67,23 @@ def check_text_response(text_response,expected_response_text):
     else:
         nagiosExit(nagios.ok)
 
-parser = argparse.ArgumentParser(description=str("A Nagios-ready python script for comparing data retrieved from an HTTP source.\n ./check_http_response.py --host 'https://example.org/status' --json 'status' 'ok'"))
-parser.add_argument('-v', '--version', action="store_true", help='Show script version and exit')
-parser.add_argument('--server', '--host', help="specify a target host", type=str)
-
-group = parser.add_mutually_exclusive_group()
-group.add_argument('--json', nargs=2, help="compares against a JSON key/value pair from a URI", type=str)
-group.add_argument('--text', nargs=1, help="compares against a plain text response from a URI")
-
-args = parser.parse_args()
-
-if args.version:
-    show_version()
-if args.json:
-    uri_request(uri=args.server, expected_response_format='JSON', arg0=args.json[0], arg1=args.json[1])
-    #args.json[0], args.json[1])
-if args.text:
-    uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]))
-    #args.text)
-
-def test():
-    check_json_response('https://example.org/status', 'status', 'ok')
-
 if __name__ == "__main__":
-  subprocess.call(["/usr/bin/env","python","check_http_response.py","-h"])
-  sys.exit(1)
+    
+    parser = argparse.ArgumentParser(description=str("A Nagios-ready python script for comparing data retrieved from an HTTP source.\n ./check_http_response.py --host 'https://example.org/status' --json 'status' 'ok'"))
+    parser.add_argument('-v', '--version', action="store_true", help='Show script version and exit')
+    parser.add_argument('--server', '--host', help="specify a target host", type=str)
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--json', nargs=2, help="compares against a JSON key/value pair from a URI", type=str)
+    group.add_argument('--text', nargs=1, help="compares against a plain text response from a URI")
+
+    args = parser.parse_args()
+
+    if args.version:
+        show_version()
+    if args.json:
+        uri_request(uri=args.server, expected_response_format='JSON', arg0=args.json[0], arg1=args.json[1])
+        #args.json[0], args.json[1])
+    if args.text:
+        uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]))
+        #args.text)
