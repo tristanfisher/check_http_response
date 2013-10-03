@@ -6,7 +6,7 @@ import sys
 import subprocess
 import argparse
 
-VERSION='1.02'
+VERSION='1.03'
 def show_version(): print(VERSION)
 
 class Nagios:
