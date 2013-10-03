@@ -68,7 +68,7 @@ def check_text_response(text_response,expected_response_text):
         nagiosExit(nagios.ok)
 
 if __name__ == "__main__":
-    
+
     parser = argparse.ArgumentParser(description=str("A Nagios-ready python script for comparing data retrieved from an HTTP source.\n ./check_http_response.py --host 'https://example.org/status' --json 'status' 'ok'"))
     parser.add_argument('-v', '--version', action="store_true", help='Show script version and exit')
     parser.add_argument('--server', '--host', help="specify a target host", type=str)
@@ -83,7 +83,8 @@ if __name__ == "__main__":
         show_version()
     if args.json:
         uri_request(uri=args.server, expected_response_format='JSON', arg0=args.json[0], arg1=args.json[1])
-        #args.json[0], args.json[1])
     if args.text:
         uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]))
-        #args.text)
+    if not args.version or args.json or args.text:
+        subprocess.call([__file__,"--help"]) #a hack but it works for now
+
