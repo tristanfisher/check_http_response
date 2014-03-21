@@ -3,32 +3,32 @@ check_http_response
 
 A python module to check an HTTP response either via JSON or plaintext.  Useful for nagios.
 
+		usage: check_http_response.py [-h] [-v] [--server SERVER] [--headers_only]
+									  [--json JSON JSON | --text TEXT]
 
-	usage: check_http_response.py [-h] [-v] [--server SERVER]
-                              [--json JSON JSON | --text TEXT]
+		A Nagios-ready python script for comparing data retrieved from an HTTP source.
+		./check_http_response.py --host 'https://example.org/status' --json 'status'
+		'ok'
 
-	A Nagios-ready python script for comparing data retrieved from an HTTP source.
-	./check_http_response.py --host 'https://example.org/status' --json 'status'
-	'ok'
-
-	optional arguments:
-	  -h, --help            show this help message and exit
-	  -v, --version         Show script version and exit
-	  --server SERVER, --host SERVER
-                        specify a target host
-	  --json JSON JSON      compares against a JSON key/value pair from a URI
-	  --text TEXT           compares against a plain text response from a URI
+		optional arguments:
+		  -h, --help            show this help message and exit
+		  -v, --version         Show script version and exit
+		  --server SERVER, --host SERVER
+								specify a target host
+		  --headers_only        retrieve only the headers
+		  --json JSON JSON      compares against a JSON key/value pair from a URI
+		  --text TEXT           compares against a plain text response from a URI
 
 
-#####A word of caution with checking text: 
+#####A word of caution with checking text:
 
-If you plan on checking a text file, you likely want to write data to the file without a newline. 
+If you plan on checking a text file, you likely want to write data to the file without a newline.
 
-e.g. use the following: 
+e.g. use the following:
 
 `$ echo -n 'ok' > /var/www/testpage.html`
 
-Otherwise, you're actually putting in the contents `'ok\n'` and *may be surprised* by the check returning an error.  
+Otherwise, you're actually putting in the contents `'ok\n'` and *may be surprised* by the check returning an error.
 
 e.g. you may run into the following:
 
@@ -39,7 +39,7 @@ e.g. you may run into the following:
 `(2, "CRITICAL - Expected ok ; Received: ok\n]")`
 
 
-This is not a flaw in check_http_response or tools such as echo.  The latter tries to be helpful (most of the time, you want a newline) and the prior by design should be strict in its comparisons. 
+This is not a flaw in check_http_response or tools such as echo.  The latter tries to be helpful (most of the time, you want a newline) and the prior by design should be strict in its comparisons.
 
 
 ###Requirements
