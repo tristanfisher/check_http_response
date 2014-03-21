@@ -6,7 +6,7 @@ import sys
 import subprocess
 import argparse
 
-VERSION='1.03'
+VERSION='1.04'
 def show_version(): print(VERSION)
 
 class Nagios:
@@ -25,12 +25,13 @@ def nagiosExit(exit_code,msg=None):
         print(exit_code[0],exit_code[1] + " - " + str(msg))
         sys.exit(exit_code[0])
 
-def uri_request(uri, expected_response_format=None, arg0=None, arg1=None):
+def uri_request(uri, expected_response_format=None, arg0=None, arg1=None, headers_only=False):
     try:
-        request = requests.get(uri)
+        if headers_only == True:  request = requests.head(uri)
+        else: request = requests.get(uri)
+
         if request.status_code > 200:
             nagiosExit(nagios.critical, str("Status code: {0} :: {1}".format(request.status_code, uri)))
-
         else:
             if expected_response_format == 'JSON':
                 json_response = json.loads(request.text)
@@ -72,6 +73,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=str("A Nagios-ready python script for comparing data retrieved from an HTTP source.\n ./check_http_response.py --host 'https://example.org/status' --json 'status' 'ok'"))
     parser.add_argument('-v', '--version', action="store_true", help='Show script version and exit')
     parser.add_argument('--server', '--host', help="specify a target host", type=str)
+    parser.add_argument('--headers_only', help="retrieve only the headers", action='store_true', default=False)
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--json', nargs=2, help="compares against a JSON key/value pair from a URI", type=str)
@@ -82,9 +84,11 @@ if __name__ == "__main__":
     if args.version:
         show_version()
     if args.json:
-        uri_request(uri=args.server, expected_response_format='JSON', arg0=args.json[0], arg1=args.json[1])
+        uri_request(uri=args.server, expected_response_format='JSON', arg0=args.json[0], arg1=args.json[1],
+                headers_only=args.headers_only)
     if args.text:
-        uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]))
+        uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]),
+                headers_only=args.headers_only)
     if not args.version or args.json or args.text:
         subprocess.call([__file__,"--help"]) #a hack but it works for now
 
