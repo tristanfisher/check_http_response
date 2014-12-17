@@ -6,7 +6,7 @@ import sys
 import subprocess
 import argparse
 
-VERSION='1.05'
+VERSION='1.06'
 def show_version(): print(VERSION)
 
 class Nagios:
@@ -21,7 +21,7 @@ def nagiosExit(exit_code,msg=None):
     """Exit script with a str() message and an integer 'nagios_code', which is a sys.exit level."""
     if msg:
         print(exit_code[0],exit_code[1] + " - " + str(msg))
-    sys.exit(nagios.ok[0])
+    sys.exit(exit_code[0])
 
 def uri_request(uri, expected_response_format=None, arg0=None, arg1=None, headers_only=False):
     try:
