@@ -6,7 +6,7 @@ import sys
 import subprocess
 import argparse
 
-VERSION='1.04'
+VERSION='1.05'
 def show_version(): print(VERSION)
 
 class Nagios:
@@ -19,11 +19,9 @@ nagios = Nagios()
 
 def nagiosExit(exit_code,msg=None):
     """Exit script with a str() message and an integer 'nagios_code', which is a sys.exit level."""
-    if (msg == None):
-        sys.exit(nagios.ok[0])
-    else:
+    if msg:
         print(exit_code[0],exit_code[1] + " - " + str(msg))
-        sys.exit(exit_code[0])
+    sys.exit(nagios.ok[0])
 
 def uri_request(uri, expected_response_format=None, arg0=None, arg1=None, headers_only=False):
     try:
@@ -34,7 +32,10 @@ def uri_request(uri, expected_response_format=None, arg0=None, arg1=None, header
             nagiosExit(nagios.critical, str("Status code: {0} :: {1}".format(request.status_code, uri)))
         else:
             if expected_response_format == 'JSON':
-                json_response = json.loads(request.text)
+                try:
+                    json_response = json.loads(request.text)
+                except ValueError:
+                    nagiosExit(nagios.critical, str("Could not decode valid JSON at URI: {0}".format(uri)))
                 check_json_response(json_response, check_json_key=arg0, check_json_value=arg1)
             else:
                 text_response = str(request.content) #be careful on strings that could look like other types
@@ -90,5 +91,5 @@ if __name__ == "__main__":
         uri_request(uri=args.server, expected_response_format='text', arg0=str(args.text[0]),
                 headers_only=args.headers_only)
     if not args.version or args.json or args.text:
-        subprocess.call([__file__,"--help"]) #a hack but it works for now
-
+        parser.print_help()
+        sys.exit(0)
